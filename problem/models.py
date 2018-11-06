@@ -8,18 +8,18 @@ TYPE_MACHINE = [
 ]
 
 TYPE_PROBLEM = [
-    ('1', "Le linge est bloqué dans la machine (the laundry is stuck inside the machine)"),
-    ('2', "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a coin but the cycle didn't start)"),
-    ('3', 'La laverie est innondée (the laundry is flooded)'),
-    ('4', 'Le monnayeur a été fracturé (the change machine has been broken into)'),
-    ('0', 'Autre/Other'),
+    (1, "Le linge est bloqué dans la machine (the laundry is stuck inside the machine)"),
+    (2, "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a coin but the cycle didn't start)"),
+    (4, 'La laverie est innondée (the laundry is flooded)'),
+    (5, 'Le monnayeur a été fracturé (the change machine has been broken into)'),
+    (6, 'Autre/Other'),
 ]
 
 ETAT_TICKET = [
-    ('0', "Nouveau"),
-    ('1', "Accepté"),
-    ('2', 'Refusé'),
-    ('3', 'Terminé (Jetons rendus)')
+    (0, "Nouveau"),
+    (1, "Accepté"),
+    (2, 'Refusé'),
+    (3, 'Terminé (Jetons rendus)')
 ]
 
 # Create your models here.
@@ -36,7 +36,7 @@ class Machine(models.Model):
     building=models.ForeignKey('Building', on_delete=models.CASCADE, verbose_name="Batiment", null=False, blank=False)
     type=models.CharField(max_length=3, choices=TYPE_MACHINE, null=False, blank=False)
     def __str__(self):
-        return "Bâtiment " + self.batiment.name + " - Machine n° " + self.numer
+        return "Bâtiment " + self.building.name + " - Machine n° " + self.number
 
 class Ticket(models.Model):
     insa_email=models.EmailField()
@@ -45,17 +45,17 @@ class Ticket(models.Model):
     room = models.CharField(verbose_name='Chambre', blank=True, max_length=10, null=True)
     phone_number = models.CharField(verbose_name='Numéro de téléphone', blank=False, max_length=12, null=False)
     machine=models.ForeignKey('Machine', on_delete=models.SET_NULL, null=True)
-    problem_type=models.IntegerField(choices=TYPE_PROBLEM, null=False, blank=False)
+    problem_type=models.IntegerField(choices=TYPE_PROBLEM, blank=False)
     number_token_lost = models.IntegerField(verbose_name="Nombre de jetons perdus", blank=False, default=0)
-    user_comment=models.TextField(verbose_name="Commentaire")
+    user_comment=models.TextField(verbose_name="Commentaire", null=True, blank=True)
     date_submission = models.DateTimeField(auto_now_add=True)
-    state=models.IntegerField(verbose_name="Etat", choices=ETAT_TICKET, null=False, blank=False, default=0)
-    number_token_refund = models.IntegerField(verbose_name="Nombre de jetons rendus", blank=False, default=0)
-    staff_comment = models.TextField(verbose_name="Commentaire staff (envoyé par email)")
-    date_treatment = models.DateTimeField(default=None)
-    date_refund = models.DateTimeField(default=None)
+    state=models.IntegerField(verbose_name="Etat", choices=ETAT_TICKET, blank=False, default=0)
+    number_token_refund = models.IntegerField(verbose_name="Nombre de jetons rendus", blank=True, default=0, null=True)
+    staff_comment = models.TextField(verbose_name="Commentaire staff (envoyé par email)", blank=True, null=True)
+    date_treatment = models.DateTimeField(default=None, blank=True, null=True)
+    date_refund = models.DateTimeField(default=None , blank=True, null=True)
     def __str__(self):
-        return "Ticket " + self.id
+        return "Ticket #" + str(self.pk)
     @property
     def count_same_email(self):
         return Ticket.objects.filter(insa_email=self.insa_email).all().count()
