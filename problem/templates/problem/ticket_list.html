@@ -18,7 +18,7 @@
               <td>{{ ticket.machine }}</td>
               <td>{{ ticket.problem_type }}</td>
               <td>{{ ticket.state }}</td>
-              <td><a href="{% url "home_submit" %}">Edit</a></td>
+              <td><a href="{% url "show_ticket" ticket.pk %}">Edit</a></td>
           </tr>
       {% endfor %}
   </table>

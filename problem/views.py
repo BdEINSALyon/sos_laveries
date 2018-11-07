@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import HomeForm, TicketForm
+from .forms import HomeForm, TicketForm, AcceptForm
 from django.views.generic import ListView, DetailView
 from .models import Ticket
 from django.utils import timezone
@@ -52,3 +52,9 @@ def ValidRefund(request, pk_ticket):
     ticket.date_refund=timezone.now()
     ticket.save()
     return redirect(reverse('to_refund_list'))
+
+def AcceptTicket(request, pk_ticket):
+    form = AcceptForm(request.POST or None)
+    if form.is_valid():
+        state = True
+    return render(request, 'problem/step2_form.html', locals())

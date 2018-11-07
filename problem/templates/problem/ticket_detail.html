@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<ul>
+<div class="card">
+  <div class="card-header">
+    Identité
+  </div>
+  <div class="card-body">
+      <p class="card-text">Nom : {{ object.first_name }} {{ object.last_name }}</p>
+      <p class="card-text">Email INSA : {{ object.insa_email }} (Vu {{ object.count_same_email }} fois)</p>
+      <p class="card-text">Chambre : {{ object.room }}</p>
+      <p class="card-text">Téléphone : {{ object.phone_number }}</p>
+  </div>
+</div><br/>
+
+<div class="card">
+  <div class="card-header">
+    Nature du problème
+  </div>
+  <div class="card-body">
+      <p class="card-text">Envoyé le : {{ object.date_submission }}</p>
+      <p class="card-text">Machine concernée : {{ object.machine }}</p>
+      <p class="card-text">Problème : {{ object.problem_type }}</p>
+      <p class="card-text">Détail utilisateur : {{ object.user_comment }}</p>
+      <p class="card-text">Nombre de jetons perdus : {{ object.number_token_lost }}</p>
+  </div>
+</div><br/>
+
+<div class="card">
+  <div class="card-header">
+    Résolution
+  </div>
+  <div class="card-body">
+      {% if object.state == 0 %}
+          <p class="card-text" align="center"><button type="button" class="btn btn-success btn-lg">Valider remboursement</button>
+          <button type="button" class="btn btn-danger btn-lg">Rejeter remboursement</button></p>
+          <p class="card-text">En attente de traitement</p>
+      {% elif object.state == 1 %}
+          <p class="card-text">Accepté le {{ object.date_treatment }} pour un remboursement de {{ object.number_token_refund }}</p>
+          {% if object.staff_comment is not None %}
+              <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+          {% endif %}
+          <h5 class="card-title">Changer d'avis</h5>
+          <p class="card-text" align="center">
+          <button type="button" class="btn btn-danger btn-lg">Rejeter remboursement</button></p>
+      {% elif object.state == 2 %}
+          <p class="card-text">Refusé le {{ object.date_treatment }}</p>
+          {% if object.staff_comment is not None %}
+              <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+          {% endif %}
+          <h5 class="card-title">Changer d'avis</h5>
+          <p class="card-text" align="center"><button type="button" class="btn btn-success btn-lg">Valider remboursement</button>
+          </p>
+      {% elif object.state == 3 %}
+          <p class="card-text">Remboursé {{ object.number_token_refund }} jetons le {{ object.date_refund }}</p>
+          {% if object.staff_comment is not None %}
+              <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+          {% endif %}
+      {% endif %}
+  </div>
+</div>
+{% endblock %}
