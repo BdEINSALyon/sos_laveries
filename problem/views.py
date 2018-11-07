@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import HomeForm, TicketForm
+from django.views.generic import ListView, DetailView
 import sys
 
 
