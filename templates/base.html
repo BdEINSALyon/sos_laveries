@@ -18,11 +18,11 @@
 
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url "list_member"%}">MApp - BdE INSA Lyon</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url "home_submit"%}">MApp - BdE INSA Lyon</a>
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          {{user.username}} <a class="nav-link" href="{% url "logout"%}">Logout</a>
+          {{user.username}} <a class="nav-link" href="{% url "home_submit"%}">Logout</a>
         </li>
       </ul>
     </nav>
@@ -33,13 +33,13 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="{% url "list_member"%}">
+                <a class="nav-link active" href="{% url "home_submit"%}">
                   <span data-feather="home"></span>
                   Liste des MA
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "list_team"%}">
+                <a class="nav-link" href="{% url "home_submit"%}">
                   <span data-feather="file"></span>
                   Liste des Equipes
                 </a>
