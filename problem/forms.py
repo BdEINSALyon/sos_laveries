@@ -16,3 +16,6 @@ class TicketForm(forms.ModelForm):
 class AcceptForm(forms.Form):
     number_token_refund = forms.IntegerField(required=True)
     staff_comment = forms.CharField(required=False)
+
+class RejectForm(forms.Form):
+    staff_comment = forms.CharField(required=True)

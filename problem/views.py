@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import HomeForm, TicketForm, AcceptForm
+from .forms import HomeForm, TicketForm, AcceptForm, RejectForm
 from django.views.generic import ListView, DetailView
 from .models import Ticket
 from django.utils import timezone
@@ -54,7 +54,30 @@ def ValidRefund(request, pk_ticket):
     return redirect(reverse('to_refund_list'))
 
 def AcceptTicket(request, pk_ticket):
-    form = AcceptForm(request.POST or None)
+    ticket = Ticket.objects.get(pk=pk_ticket)
+    if(ticket.number_token_lost>3):
+        number_ticket_refund=3
+    else:
+        number_ticket_refund=ticket.number_token_lost
+    form = AcceptForm(request.POST or None, initial={"number_token_refund": number_ticket_refund})
     if form.is_valid():
-        state = True
+        ticket.date_treatment=timezone.now()
+        ticket.number_token_refund=form.cleaned_data["number_token_refund"]
+        ticket.state=1
+        ticket.staff_comment=form.cleaned_data["staff_comment"]
+        ticket.save()
+        return redirect(reverse("to_treat_list"))
+
+    return render(request, 'problem/step2_form.html', locals())
+
+def RejectTicket(request, pk_ticket):
+    form = RejectForm(request.POST or None)
+    ticket = Ticket.objects.get(pk=pk_ticket)
+    if form.is_valid():
+        ticket.date_treatment=timezone.now()
+        ticket.number_token_refund=0
+        ticket.state=2
+        ticket.staff_comment=form.cleaned_data["staff_comment"]
+        ticket.save()
+        return redirect(reverse("to_treat_list"))
     return render(request, 'problem/step2_form.html', locals())

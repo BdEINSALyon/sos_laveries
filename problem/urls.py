@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.home, name='home_submit'),
     path('submit/<int:building_id>', views.Step2Create, name='step2_submit'),
     path('manager/accept/<int:pk_ticket>', views.AcceptTicket, name='accept_ticket'),
+    path('manager/reject/<int:pk_ticket>', views.RejectTicket, name='reject_ticket'),
     path('manager/refund/<int:pk_ticket>', views.ValidRefund, name='valid_refund'),
     path('manager/new',views.BrowseNew.as_view(), name='to_treat_list'),
     path('manager/all',views.BrowseAll.as_view(), name='all_list'),
