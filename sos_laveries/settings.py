@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'anymail',
     'crispy_forms',
     'captcha',
-    'django_crontab'
+    'django_crontab',
+    'email_obfuscator'
 
 ]
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% load email_obfuscator %}
 <!doctype html>
 <html lang="fr">
 <head>
@@ -32,7 +33,11 @@
 <img src="https://logos.bde-insa-lyon.fr/bde/bde.png" height="200px">
 <h2>SOS Laveries</h2>
 <div class="container">{% block content %}{% endblock %}
-    <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p></div>
+    <p class="mb-3 text-muted">Si tu ne trouves pas de réponse à ton problème, envoi un email
+        à {{ 'laveries@bde-insa-lyon.fr'|obfuscate_mailto }} (Aucun remboursement de jetons ne sera possible par
+        email)</p>
+    <p class="mt-5 mb-3 text-muted">&copy; <a href="https://github.com/rtorrente" target="_blank" style="color: grey">rtorrente</a>,
+        <a href="https://www.bde-insa-lyon.fr" target="_blank" style="color: grey">BdE INSA Lyon</a> 2019</p></div>
 </form>
 </body>
 </html>
