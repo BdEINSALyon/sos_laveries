@@ -14,8 +14,10 @@ ENV DJANGO_ENV 'dev'
 ENV MAILGUN_KEY ''
 ENV MAILGUN_DOMAIN ''
 ENV DEFAULT_FROM_EMAIL ''
-ENV ALLOWED_HOSTS "affichage.bde-insa-lyon.fr"
+ENV ALLOWED_HOSTS "sos-laveries.bde-insa-lyon.fr"
 ENV RECAPTCHA_PUBLIC_KEY ''
 ENV RECAPTCHA_PRIVATE_KEY ''
+ENV EMAIL_RESP_SERVICES 'services@bde-insa-lyon.fr'
+ENV EMAIL_RESP_LAVERIE ''
 RUN chmod +x bash/run-prod.sh
 CMD bash/run-prod.sh
