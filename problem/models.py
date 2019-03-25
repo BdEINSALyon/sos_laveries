@@ -24,7 +24,8 @@ ETAT_TICKET = [
 
 # Create your models here.
 class Building(models.Model):
-    name=models.CharField(max_length=30, verbose_name="Nom du batiment")
+    name = models.CharField(max_length=30, verbose_name="Lettre du batiment",
+                            help_text="Uniquement lettre (Ex : A pour le bat A)")
     active=models.BooleanField(verbose_name="Bâtiment ouvert (Possible de soumettre un problème)")
     def __str__(self):
         return "Bâtiment " + self.name + " (Building " + self.name + ")"

@@ -5,7 +5,8 @@ from .models import Ticket, Building, Machine
 
 
 class HomeForm(forms.Form):
-    building = forms.ModelChoiceField(queryset=Building.objects.filter(active=True), widget=forms.RadioSelect(),
+    building = forms.ModelChoiceField(queryset=Building.objects.filter(active=True).order_by("name"),
+                                      widget=forms.RadioSelect(),
                                       initial=1, label="Choisir un bâtiment (Choose a building)")
 
 class TicketForm(forms.ModelForm):
