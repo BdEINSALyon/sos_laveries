@@ -1,0 +1,13 @@
+{% autoescape off %}
+Salut !
+
+Il y a {{ ticket }} ticket{{ ticket | pluralize }} en attente de modération sur SOS-Laveries.
+Si tu allez y faire un petit tour ???
+Le lien : https://{{ site }}{% url "to_treat_list" %}
+
+Astuce : Tu recevras un autre email dans 12h, c'est pour ça que c'est mieux de traiter les tickets <3
+
+Merci pour tout ce que tu fais pour le bien être de nos INSAliens <3 !
+Bon courage et bisous
+
+{% endautoescape %}

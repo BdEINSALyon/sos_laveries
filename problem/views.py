@@ -28,6 +28,21 @@ def Step2Create(request, building_id):
             ticket = form.save(commit=False)
             ticket.state = 0
             ticket.save()
+            if ticket.problem_type in {0, 2, 3}:
+                email = []
+                if ticket.machine.building.email_resp != "" and ticket.machine.building.email_resp is not None:
+                    email.append(ticket.machine.building.email_resp)
+                if settings.EMAIL_RESP_LAVERIE != "" and settings.EMAIL_RESP_LAVERIE is not None:
+                    email.append(settings.EMAIL_RESP_LAVERIE)
+                if settings.EMAIL_RESP_SERVICES != "" and settings.EMAIL_RESP_SERVICES is not None:
+                    email.append(settings.EMAIL_RESP_SERVICES)
+                msg_plain = render_to_string('problem/email_urgent.txt', {'ticket': ticket})
+                send_mail(
+                    '[Laveries] Problème urgent Bât ' + ticket.machine.building.name,
+                    msg_plain,
+                    settings.DEFAULT_FROM_EMAIL,
+                    email,
+                )
             return redirect('home_submit')
         else:
             return render(request, 'problem/step2_form.html', {'form': form, "building": building})

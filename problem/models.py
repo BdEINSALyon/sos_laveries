@@ -1,18 +1,18 @@
 from django.db import models
 
 TYPE_MACHINE = [
+    (0, "Lave-Linge 6Kg"),
     (1, "Lave-Linge 6Kg"),
-    (2, "Lave-Linge 6Kg"),
-    (3, 'Sèche-Linge'),
-    (4, 'Monnayeur')
+    (2, 'Sèche-Linge'),
+    (3, 'Monnayeur')
 ]
 
 TYPE_PROBLEM = [
-    (1, "Le linge est bloqué dans la machine (the laundry is stuck inside the machine)"),
-    (2, "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a coin but the cycle didn't start)"),
-    (4, 'La laverie est innondée (the laundry is flooded)'),
-    (5, 'Le monnayeur a été fracturé (the change machine has been broken into)'),
-    (6, 'Autre/Other'),
+    (0, "Le linge est bloqué dans la machine (the laundry is stuck inside the machine)"),
+    (1, "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a coin but the cycle didn't start)"),
+    (2, 'La laverie est innondée (the laundry is flooded)'),
+    (3, 'Le monnayeur a été fracturé (the change machine has been broken into)'),
+    (4, 'Autre/Other'),
 ]
 
 ETAT_TICKET = [
@@ -26,6 +26,7 @@ ETAT_TICKET = [
 class Building(models.Model):
     name = models.CharField(max_length=30, verbose_name="Lettre du batiment",
                             help_text="Uniquement lettre (Ex : A pour le bat A)")
+    email_resp = models.CharField(max_length=255, null=True, blank=True, verbose_name="Email resp. laverie du batiment")
     active=models.BooleanField(verbose_name="Bâtiment ouvert (Possible de soumettre un problème)")
     def __str__(self):
         return "Bâtiment " + self.name + " (Building " + self.name + ")"

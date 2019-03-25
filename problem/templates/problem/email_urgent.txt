@@ -1,0 +1,19 @@
+{% autoescape off %}
+Salut !
+
+Un problème urgent a eu lieu dans le bâtiment {{ ticket.machine.building.name }}
+Machine : {{ ticket.machine }} ({{ ticket.machine.get_machine_type }})
+Problème : {{ ticket.get_problem }}
+Nombre de jetons déclarés perdus : {{ ticket.number_token_lost }}
+
+Contact utilisateur :
+Nom : {{ ticket.last_name }}
+Prénom : {{ ticket.first_name }}
+Chambre : {{ ticket.room }}
+Téléphone : {{ ticket.phone_number }}
+Email : {{ ticket.insa_email }}
+
+Merci pour le dépannage rapide !
+Bon courage et bisous
+
+{% endautoescape %}

@@ -128,6 +128,7 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CRONJOBS = [
+    ('0 */12 * * *', 'problem.cron.notify_pending')
 ]
 
 # FIX Variables d'environnement pas présentes dans cron
@@ -148,6 +149,9 @@ ANYMAIL = {
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', "sos-laveries@mg.bde-insa-lyon.fr")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+EMAIL_RESP_LAVERIE = os.getenv('EMAIL_RESP_LAVERIE')
+EMAIL_RESP_SERVICES = os.getenv('EMAIL_RESP_SERVICES', "services@bde-insa-lyon.fr")
 
 MAIL_FROM_ADDRESS = os.getenv('MAIL_FROM_ADDRESS', 'no-reply@mg.bde-insa-lyon.fr')
 
