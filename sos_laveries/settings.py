@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import dj_database_url
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,12 +21,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vb6m0)3cox7u#1$z6lyybs0=0z3@5kly_m6l38l*88l2dr3yfm'
+SECRET_KEY = os.getenv('SECRET_KEY', 'o1(en$lqa0@k*#we79=ooqpuk#%wzqgj2qk!^t43pxdu(=^w_8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_ENV', 'dev') == 'dev'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', "sos-laveries.bde-insa-lyon.fr")]
+if DEBUG:
+    ALLOWED_HOSTS.extend(['127.0.0.1'])
+    ALLOWED_HOSTS.extend(['localhost'])
 
 
 # Application definition
@@ -38,7 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'problem',
-    'formtools'
+    'anymail',
+    'crispy_forms',
+    'captcha',
+    'django_crontab'
+
 ]
 
 MIDDLEWARE = [
@@ -50,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Verifier que les clés de test du captcha ne sont pas utilisées
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 ROOT_URLCONF = 'sos_laveries.urls'
 
@@ -76,11 +86,9 @@ WSGI_APPLICATION = 'sos_laveries.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'), conn_max_age=600)
 }
 
 
@@ -116,6 +124,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CRONJOBS = [
+]
+
+# FIX Variables d'environnement pas présentes dans cron
+CRONTAB_COMMAND_PREFIX = '. /tmp/env.txt &&'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -124,6 +139,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = 'ACCESS-KEY'
-MAILGUN_SERVER_NAME = 'SERVER-NAME'
+ANYMAIL = {
+    # (exact settings here depend on your ESP...)
+    "MAILGUN_API_KEY": os.getenv('MAILGUN_KEY', ""),
+    "MAILGUN_SENDER_DOMAIN": os.getenv('MAILGUN_DOMAIN', 'mg.bde-insa-lyon.fr'),  # your Mailgun domain, if needed
+}
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', "sos-laveries@mg.bde-insa-lyon.fr")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+MAIL_FROM_ADDRESS = os.getenv('MAIL_FROM_ADDRESS', 'no-reply@mg.bde-insa-lyon.fr')
+
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', "")
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', "")

@@ -1,0 +1,37 @@
+{% extends "base_admin.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% if action == "accept" %}<h2 style="color: green; text-align: center">Accepter le ticket</h2>
+    {% elif action == "reject" %}<h2 style="color: red; text-align: center">Refuser le ticket</h2>{% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success btn-lg btn-block">Valider</button>
+    </form>
+    <h2 style="text-align: center;">Rappel ticket</h2>
+    <div class="card">
+        <div class="card-header">
+            Identité
+        </div>
+        <div class="card-body">
+            <p class="card-text">Nom : {{ object.first_name }} {{ object.last_name }}</p>
+            <p class="card-text">Email INSA : {{ object.insa_email }} (Vu {{ object.count_same_email }} fois)</p>
+            <p class="card-text">Chambre : {{ object.room }}</p>
+            <p class="card-text">Téléphone : {{ object.phone_number }}</p>
+        </div>
+    </div><br/>
+
+    <div class="card">
+        <div class="card-header">
+            Nature du problème
+        </div>
+        <div class="card-body">
+            <p class="card-text">Envoyé le : {{ object.date_submission }}</p>
+            <p class="card-text">Machine concernée : {{ object.machine }} ({{ object.machine.get_machine_type }})</p>
+            <p class="card-text">Problème : {{ object.get_problem }}</p>
+            <p class="card-text">Détail utilisateur : {{ object.user_comment }}</p>
+            <p class="card-text">Nombre de jetons perdus : {{ object.number_token_lost }}</p>
+        </div>
+    </div>
+{% endblock %}

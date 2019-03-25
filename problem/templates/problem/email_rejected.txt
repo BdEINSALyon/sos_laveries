@@ -1,0 +1,10 @@
+{% autoescape off %}
+Bonjour {{ ticket.first_name }} {{ ticket.last_name }},
+
+Ton ticket SOS-Laveries du {{ ticket.date_submission.date }} a été refusé.
+
+Commentaire du responsable laverie : {{ ticket.staff_comment }}
+
+L'équipe laveries du BdE INSA Lyon
+
+{% endautoescape %}

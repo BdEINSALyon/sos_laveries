@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% block content %}
 <ul>
 <div class="table-responsive">
@@ -16,8 +16,8 @@
               <td>{{ ticket.date_submission }}</td>
               <td>{{ ticket.first_name }} {{ ticket.last_name }}</td>
               <td>{{ ticket.machine }}</td>
-              <td>{{ ticket.problem_type }}</td>
-              <td>{{ ticket.state }}</td>
+              <td>{{ ticket.get_problem }}</td>
+              <td>{{ ticket.get_state }}</td>
               <td><a href="{% url "show_ticket" ticket.pk %}">Edit</a></td>
           </tr>
       {% endfor %}

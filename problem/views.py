@@ -1,9 +1,14 @@
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
-from .forms import HomeForm, TicketForm, AcceptForm, RejectForm
-from django.views.generic import ListView, DetailView
-from .models import Ticket
 from django.utils import timezone
+from django.views.generic import ListView
+
+from sos_laveries import settings
+from .forms import HomeForm, TicketForm, AcceptForm, RejectForm
+from .models import Ticket, Building
 
 
 def home(request):
@@ -12,10 +17,11 @@ def home(request):
         building = form.cleaned_data['building']
         return redirect(reverse('step2_submit', args=(building.pk,)))
     else:
-        return render(request, 'problem/home_form.html', locals())
+        return render(request, 'problem/home_form.html', {"form": form})
 
 
 def Step2Create(request, building_id):
+    building = get_object_or_404(Building, pk=building_id)
     if request.method == 'POST':
         form = TicketForm(building_id, request.POST)
         if form.is_valid():
@@ -24,10 +30,12 @@ def Step2Create(request, building_id):
             ticket.save()
             return redirect('home_submit')
         else:
-            return render(request, 'problem/step2_form.html', {'form': form})
+            return render(request, 'problem/step2_form.html', {'form': form, "building": building})
     else:
         form = TicketForm(building_id)
-    return render(request, 'problem/step2_form.html', {'form': form})
+    return render(request, 'problem/step2_form.html', {'form': form, "building": building})
+
+
 
 class BrowseNew(ListView):
     paginate_by = 25
@@ -35,10 +43,12 @@ class BrowseNew(ListView):
     def get_queryset(self):
         return Ticket.objects.filter(state=0).order_by('-date_submission')
 
+
 class BrowseAll(ListView):
     paginate_by = 25
-    model=Ticket
+    model = Ticket
     ordering = ['-date_submission']
+
 
 class BrowseToRefund(ListView):
     model=Ticket
@@ -46,12 +56,14 @@ class BrowseToRefund(ListView):
     def get_queryset(self):
         return Ticket.objects.filter(state=1).order_by('-date_submission')
 
+
 def ValidRefund(request, pk_ticket):
     ticket = Ticket.objects.get(pk=pk_ticket)
     ticket.state=3
     ticket.date_refund=timezone.now()
     ticket.save()
     return redirect(reverse('to_refund_list'))
+
 
 def AcceptTicket(request, pk_ticket):
     ticket = Ticket.objects.get(pk=pk_ticket)
@@ -66,9 +78,16 @@ def AcceptTicket(request, pk_ticket):
         ticket.state=1
         ticket.staff_comment=form.cleaned_data["staff_comment"]
         ticket.save()
+        msg_plain = render_to_string('problem/email_approved.txt', {'ticket': ticket})
+        send_mail(
+            'Validation de la demande de remboursement',
+            msg_plain,
+            settings.DEFAULT_FROM_EMAIL,
+            [ticket.insa_email],
+        )
         return redirect(reverse("to_treat_list"))
+    return render(request, 'problem/form_admin.html', {"object": ticket, "form": form, "action": "accept"})
 
-    return render(request, 'problem/step2_form.html', locals())
 
 def RejectTicket(request, pk_ticket):
     form = RejectForm(request.POST or None)
@@ -79,5 +98,12 @@ def RejectTicket(request, pk_ticket):
         ticket.state=2
         ticket.staff_comment=form.cleaned_data["staff_comment"]
         ticket.save()
+        msg_plain = render_to_string('problem/email_rejected.txt', {'ticket': ticket})
+        send_mail(
+            'Rejet de la demande de remboursement',
+            msg_plain,
+            settings.DEFAULT_FROM_EMAIL,
+            [ticket.insa_email],
+        )
         return redirect(reverse("to_treat_list"))
-    return render(request, 'problem/step2_form.html', locals())
+    return render(request, 'problem/form_admin.html', {"object": ticket, "form": form, "action": "reject"})

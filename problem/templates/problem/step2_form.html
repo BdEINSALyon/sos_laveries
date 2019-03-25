@@ -1,7 +1,12 @@
-{% if envoi %}Votre message a bien été envoyé !{% endif %}
+{% extends "base_user.html" %}
+{% load crispy_forms_tags %}
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+{% block content %}
+    <h6>{{ building }}</h6>
+    <a href="{% url "home_submit" %}">Retour au choix du bâtiment (Return to building selection)</a><br/><br/>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success btn-lg btn-block">Valider</button>
+    </form>
+{% endblock %}

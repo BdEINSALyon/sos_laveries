@@ -1,10 +1,10 @@
 from django.db import models
 
 TYPE_MACHINE = [
-    ('L6', "Lave-Linge 6Kg"),
-    ('L10', "Lave-Linge 6Kg"),
-    ('S', 'Sèche-Linge'),
-    ('M', 'Monnayeur')
+    (1, "Lave-Linge 6Kg"),
+    (2, "Lave-Linge 6Kg"),
+    (3, 'Sèche-Linge'),
+    (4, 'Monnayeur')
 ]
 
 TYPE_PROBLEM = [
@@ -27,16 +27,21 @@ class Building(models.Model):
     name=models.CharField(max_length=30, verbose_name="Nom du batiment")
     active=models.BooleanField(verbose_name="Bâtiment ouvert (Possible de soumettre un problème)")
     def __str__(self):
-        return "Bâtiment " + self.name
+        return "Bâtiment " + self.name + " (Building " + self.name + ")"
 
 class Machine(models.Model):
     number=models.CharField(max_length=10, verbose_name="Numéro machine", null=False, blank=False)
     serial_number=models.CharField(max_length=30, verbose_name="Numéro de série")
     active=models.BooleanField(verbose_name="Machine active ? Possible de soumettre un problème ?", null=False, blank=False)
     building=models.ForeignKey('Building', on_delete=models.CASCADE, verbose_name="Batiment", null=False, blank=False)
-    type=models.CharField(max_length=3, choices=TYPE_MACHINE, null=False, blank=False)
+    type = models.IntegerField(choices=TYPE_MACHINE, null=False, blank=False)
     def __str__(self):
         return "Bâtiment " + self.building.name + " - Machine n° " + self.number
+
+    @property
+    def get_machine_type(self):
+        return TYPE_MACHINE[self.type][1]
+
 
 class Ticket(models.Model):
     insa_email=models.EmailField()
@@ -56,6 +61,15 @@ class Ticket(models.Model):
     date_refund = models.DateTimeField(default=None , blank=True, null=True)
     def __str__(self):
         return "Ticket #" + str(self.pk)
+
     @property
     def count_same_email(self):
         return Ticket.objects.filter(insa_email=self.insa_email).all().count()
+
+    @property
+    def get_problem(self):
+        return TYPE_PROBLEM[self.problem_type][1]
+
+    @property
+    def get_state(self):
+        return ETAT_TICKET[self.state][1]

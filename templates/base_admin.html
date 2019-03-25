@@ -33,19 +33,22 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="{% url "to_refund_list"%}">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'to_refund_list' %}active{% endif %}"
+                     href="{% url "to_refund_list" %}">
                   <span data-feather="home"></span>
                   Personnes à rembourser
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "to_treat_list"%}">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'to_treat_list' %}active{% endif %}"
+                     href="{% url "to_treat_list" %}">
                   <span data-feather="file"></span>
                   Ticket à traiter
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "all_list"%}">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'all_list' %}active{% endif %}"
+                     href="{% url "all_list" %}">
                   <span data-feather="file"></span>
                   Tous les tickets
                 </a>

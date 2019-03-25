@@ -1,6 +1,5 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% block content %}
-<ul>
 <div class="card">
   <div class="card-header">
     Identité
@@ -19,8 +18,8 @@
   </div>
   <div class="card-body">
       <p class="card-text">Envoyé le : {{ object.date_submission }}</p>
-      <p class="card-text">Machine concernée : {{ object.machine }}</p>
-      <p class="card-text">Problème : {{ object.problem_type }}</p>
+      <p class="card-text">Machine concernée : {{ object.machine }} ({{ object.machine.get_machine_type }})</p>
+      <p class="card-text">Problème : {{ object.get_problem }}</p>
       <p class="card-text">Détail utilisateur : {{ object.user_comment }}</p>
       <p class="card-text">Nombre de jetons perdus : {{ object.number_token_lost }}</p>
   </div>
