@@ -44,7 +44,8 @@
                   <a class="nav-link {% if request.resolver_match.url_name == 'to_treat_list' %}active{% endif %}"
                      href="{% url "to_treat_list" %}">
                   <span data-feather="file"></span>
-                  Ticket à traiter
+                      Ticket à traiter <span
+                          class="badge badge-pill badge-{% if user.user_new_ticket > 0 %}danger{% else %}success{% endif %}">{{ user.user_new_ticket }}</span>
                 </a>
               </li>
               <li class="nav-item">
@@ -54,6 +55,14 @@
                   Tous les tickets
                 </a>
               </li>
+                {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "admin:index" %}">
+                            <span data-feather="file"></span>
+                            Administration Django
+                        </a>
+              </li>
+                {% endif %}
             </ul>
           </div>
         </nav>

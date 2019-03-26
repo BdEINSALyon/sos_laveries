@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 TYPE_MACHINE = [
     (0, "Lave-Linge 6Kg"),
@@ -22,14 +25,25 @@ ETAT_TICKET = [
     (3, 'Clos')
 ]
 
+
+# Début surcharge model user
+def user_new_ticket(self):  # Permet de savoir si l'utilisateur a du contenu à modérer
+    return Ticket.objects.filter(state=0).count()
+
+
+User.add_to_class('user_new_ticket', user_new_ticket)
+
+
 # Create your models here.
 class Building(models.Model):
     name = models.CharField(max_length=30, verbose_name="Lettre du batiment",
                             help_text="Uniquement lettre (Ex : A pour le bat A)")
     email_resp = models.CharField(max_length=255, null=True, blank=True, verbose_name="Email resp. laverie du batiment")
     active=models.BooleanField(verbose_name="Bâtiment ouvert (Possible de soumettre un problème)")
+
     def __str__(self):
         return "Bâtiment " + self.name + " (Building " + self.name + ")"
+
 
 class Machine(models.Model):
     number=models.CharField(max_length=10, verbose_name="Numéro machine", null=False, blank=False)
@@ -37,6 +51,7 @@ class Machine(models.Model):
     active=models.BooleanField(verbose_name="Machine active ? Possible de soumettre un problème ?", null=False, blank=False)
     building=models.ForeignKey('Building', on_delete=models.CASCADE, verbose_name="Batiment", null=False, blank=False)
     type = models.IntegerField(choices=TYPE_MACHINE, null=False, blank=False)
+
     def __str__(self):
         return "Bâtiment " + self.building.name + " - Machine n° " + self.number
 
@@ -61,6 +76,7 @@ class Ticket(models.Model):
     staff_comment = models.TextField(verbose_name="Commentaire staff (envoyé par email)", blank=True, null=True)
     date_treatment = models.DateTimeField(default=None, blank=True, null=True)
     date_refund = models.DateTimeField(default=None , blank=True, null=True)
+
     def __str__(self):
         return "Ticket #" + str(self.pk)
 
