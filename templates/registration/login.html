@@ -1,0 +1,29 @@
+{% extends "registration/registration_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form class="form-signin" method="post" action="">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                Le couple user/mot de passe ne correspond pas !
+            </div>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+                <div class="alert alert-danger" role="alert">
+                    Vous n'avez pas le droit d'acceder à cette page !
+                </div>
+                <p>Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.</p>
+            {% else %}
+                <div class="alert alert-primary" role="alert">
+                    Il faut être connecté pour voir cette page !
+                </div>
+            {% endif %}
+        {% endif %}
+        {{ form|crispy }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+{% endblock %}

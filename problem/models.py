@@ -19,7 +19,7 @@ ETAT_TICKET = [
     (0, "Nouveau"),
     (1, "Accepté"),
     (2, 'Refusé'),
-    (3, 'Terminé (Jetons rendus)')
+    (3, 'Clos')
 ]
 
 # Create your models here.

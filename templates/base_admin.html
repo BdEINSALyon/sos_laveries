@@ -11,7 +11,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+            integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
   </head>
@@ -47,7 +48,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link {% if request.resolver_match.url_name == 'all_list' %}active{% endif %}"
+                  <a class="nav-link {% if request.resolver_match.url_name == 'all_list' or request.resolver_match.url_name == 'show_ticket' %}active{% endif %}"
                      href="{% url "all_list" %}">
                   <span data-feather="file"></span>
                   Tous les tickets

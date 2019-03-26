@@ -1,47 +1,60 @@
 {% extends "base_admin.html" %}
 {% block content %}
-<ul>
-<div class="table-responsive">
-  <table class="table">
-      <tr>
-          <th>Prénom</th>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Nombre de jetons à rendre</th>
-          <th>Valider rendu</th>
-      </tr>
-      {% for ticket in object_list %}
-          <tr>
-              <td>{{ ticket.first_name }}</td>
-              <td>{{ ticket.last_name }}</td>
-              <td>{{ ticket.insa_email }}</td>
-              <td>{{ ticket.number_token_refund }}</td>
-              <td><form method="get" action="{% url "valid_refund" ticket.pk %}"><button class="btn btn-success" onclick="return confirm('Etes vous sur ? Ceci est irréversible')">Jetons rendus</button></form></td>
-          </tr>
-      {% endfor %}
-  </table>
-</div>
-</ul>
-{% if page_obj.has_other_pages %}
-    <nav>
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% if object_list %}
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Nombre de jetons à rendre</th>
+                    <th>Valider rendu</th>
+                </tr>
+                {% for ticket in object_list %}
+                    <tr>
+                        <td>{{ ticket.first_name }}</td>
+                        <td>{{ ticket.last_name }}</td>
+                        <td>{{ ticket.insa_email }}</td>
+                        <td>{{ ticket.number_token_refund }}</td>
+                        <td>
+                            <form method="get" action="{% url "valid_refund" ticket.pk %}">
+                                <button class="btn btn-success"
+                                        onclick="return confirm('Etes vous sur ? Ceci est irréversible')">Jetons rendus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% if page_obj.has_other_pages %}
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                    {% endif %}
+                    {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
     {% else %}
-      <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+        <p align="center"><i style="color: green" class="fas fa-check-circle fa-10x"></i><br>
+            Personne à rembourser actuellement</p>
     {% endif %}
-    {% for i in page_obj.paginator.page_range %}
-      {% if page_obj.number == i %}
-        <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
-      {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link"href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">&raquo;</a></li>
-    {% endif %}
-  </ul></nav>
-{% endif %}
 {% endblock %}
