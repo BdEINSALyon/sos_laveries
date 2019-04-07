@@ -5,7 +5,7 @@ User = get_user_model()
 
 TYPE_MACHINE = [
     (0, "Lave-Linge 6Kg"),
-    (1, "Lave-Linge 6Kg"),
+    (1, "Lave-Linge 10Kg"),
     (2, 'Sèche-Linge'),
     (3, 'Monnayeur')
 ]

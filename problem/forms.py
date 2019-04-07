@@ -23,7 +23,8 @@ class TicketForm(forms.ModelForm):
     def __init__(self, building_id, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
         building = Building.objects.filter(pk=building_id)
-        self.fields['machine'].queryset = Machine.objects.filter(building__in=building).order_by("number")
+        self.fields['machine'].queryset = Machine.objects.filter(building__in=building).filter(active=True).order_by(
+            "number")
 
 class AcceptForm(forms.Form):
     number_token_refund = forms.IntegerField(required=True, label="Nombre de jetons à rendre",
