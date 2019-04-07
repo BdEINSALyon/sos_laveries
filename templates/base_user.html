@@ -1,9 +1,10 @@
 {% load static %}
 {% load email_obfuscator %}
-{% load google_analytics_js %}
+{% load analytical %}
 <!doctype html>
 <html lang="fr">
 <head>
+    {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>SOS Laveries - BdE INSA Lyon</title>
@@ -30,9 +31,10 @@
             }
         }
     </style>
-    {% google_analytics_js %}
+    {% analytical_head_bottom %}
 </head>
 <body class="text-center">
+{% analytical_body_top %}
 <img src="https://logos.bde-insa-lyon.fr/bde/bde.png" height="200px">
 <h2>SOS Laveries</h2>
 <div class="container">{% block content %}{% endblock %}
@@ -42,5 +44,6 @@
     <p class="mt-5 mb-3 text-muted">&copy; <a href="https://github.com/rtorrente" target="_blank" style="color: grey">rtorrente</a>,
         <a href="https://www.bde-insa-lyon.fr" target="_blank" style="color: grey">BdE INSA Lyon</a> 2019</p></div>
 </form>
+{% analytical_body_bottom %}
 </body>
 </html>
