@@ -39,7 +39,7 @@ def Step2Create(request, building_id):
                     settings.DEFAULT_FROM_EMAIL,
                     email,
                 )
-            return redirect('home_submit')
+            return render(request, 'problem/submit_ok.html', {'ticket': ticket})
         else:
             return render(request, 'problem/step2_form.html', {'form': form, "building": building})
     else:
