@@ -7,17 +7,13 @@ from django.utils import timezone
 from django.views.generic import ListView
 
 from sos_laveries import settings
-from .forms import HomeForm, TicketForm, AcceptForm, RejectForm
+from .forms import TicketForm, AcceptForm, RejectForm
 from .models import Ticket, Building
 
 
 def home(request):
-    form = HomeForm(request.POST or None)
-    if form.is_valid():
-        building = form.cleaned_data['building']
-        return redirect(reverse('step2_submit', args=(building.pk,)))
-    else:
-        return render(request, 'problem/home_form.html', {"form": form})
+    building = Building.objects.filter(active=True).order_by("name")
+    return render(request, 'problem/home_form.html', {"building": building})
 
 
 def Step2Create(request, building_id):
@@ -51,10 +47,10 @@ def Step2Create(request, building_id):
     return render(request, 'problem/step2_form.html', {'form': form, "building": building})
 
 
-
 class BrowseNew(ListView):
     paginate_by = 25
-    model=Ticket
+    model = Ticket
+
     def get_queryset(self):
         return Ticket.objects.filter(state=0).order_by('-date_submission')
 
@@ -66,32 +62,33 @@ class BrowseAll(ListView):
 
 
 class BrowseToRefund(ListView):
-    model=Ticket
+    model = Ticket
     template_name = 'problem/torefund_list.html'
+
     def get_queryset(self):
         return Ticket.objects.filter(state=1).order_by('-date_submission')
 
 
 def ValidRefund(request, pk_ticket):
     ticket = Ticket.objects.get(pk=pk_ticket)
-    ticket.state=3
-    ticket.date_refund=timezone.now()
+    ticket.state = 3
+    ticket.date_refund = timezone.now()
     ticket.save()
     return redirect(reverse('to_refund_list'))
 
 
 def AcceptTicket(request, pk_ticket):
     ticket = Ticket.objects.get(pk=pk_ticket)
-    if(ticket.number_token_lost>3):
-        number_ticket_refund=3
+    if (ticket.number_token_lost > 3):
+        number_ticket_refund = 3
     else:
-        number_ticket_refund=ticket.number_token_lost
+        number_ticket_refund = ticket.number_token_lost
     form = AcceptForm(request.POST or None, initial={"number_token_refund": number_ticket_refund})
     if form.is_valid():
-        ticket.date_treatment=timezone.now()
-        ticket.number_token_refund=form.cleaned_data["number_token_refund"]
-        ticket.state=1
-        ticket.staff_comment=form.cleaned_data["staff_comment"]
+        ticket.date_treatment = timezone.now()
+        ticket.number_token_refund = form.cleaned_data["number_token_refund"]
+        ticket.state = 1
+        ticket.staff_comment = form.cleaned_data["staff_comment"]
         ticket.save()
         msg_plain = render_to_string('problem/email_approved.txt', {'ticket': ticket})
         send_mail(
@@ -108,10 +105,10 @@ def RejectTicket(request, pk_ticket):
     form = RejectForm(request.POST or None)
     ticket = Ticket.objects.get(pk=pk_ticket)
     if form.is_valid():
-        ticket.date_treatment=timezone.now()
-        ticket.number_token_refund=0
-        ticket.state=2
-        ticket.staff_comment=form.cleaned_data["staff_comment"]
+        ticket.date_treatment = timezone.now()
+        ticket.number_token_refund = 0
+        ticket.state = 2
+        ticket.staff_comment = form.cleaned_data["staff_comment"]
         ticket.save()
         msg_plain = render_to_string('problem/email_rejected.txt', {'ticket': ticket})
         send_mail(

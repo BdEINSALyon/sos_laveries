@@ -2,9 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-success btn-lg btn-block">Valider</button>
-    </form>
+    <h4 class="mt-4 mb-4">Choisir un bâtiment / Choose a building</h4>
+    {% if building %}
+        {% for building_item in building %}
+            <a href="{% url "step2_submit" building_item.pk %}">
+                <button type="button" class="btn btn-primary btn-sm mb-3">Bâtiment {{ building_item.name }} -
+                    Building {{ building_item.name }}</button>
+            </a>
+        {% endfor %}
+    {% else %}
+    {% endif %}
 {% endblock %}
