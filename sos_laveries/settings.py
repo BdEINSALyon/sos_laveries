@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'captcha',
     'django_crontab',
-    'email_obfuscator'
+    'email_obfuscator',
+    'analytical'
 
 ]
 
@@ -151,3 +152,5 @@ EMAIL_RESP_SERVICES = os.getenv('EMAIL_RESP_SERVICES', "services@bde-insa-lyon.f
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', "")
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', "")
+
+GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv('GOOGLE_ANALYTICS_PROPERTY_ID')

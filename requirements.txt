@@ -5,6 +5,7 @@ defusedxml==0.5.0
 diff-match-patch==20181111
 dj-database-url==0.5.0
 Django==2.2
+django-analytical==2.5.0
 django-anymail==6.0
 django-crispy-forms==1.7.2
 django-crontab==0.7.1
