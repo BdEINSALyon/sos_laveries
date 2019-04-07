@@ -4,9 +4,17 @@ Appli de support client pour les laveries du BdE INSA Lyon
 ## Env variables
 
 ```
-ENV DATABASE_URL postgres://mapp@db/mapp
+ENV DATABASE_URL postgres://ad@db/ad
 ENV SECRET_KEY ''
-ENV DJANGO_ENV ''
+ENV DJANGO_ENV 'dev'
+ENV MAILGUN_KEY ''
+ENV MAILGUN_DOMAIN ''
+ENV DEFAULT_FROM_EMAIL ''
+ENV ALLOWED_HOSTS "sos-laveries.bde-insa-lyon.fr"
+ENV RECAPTCHA_PUBLIC_KEY ''
+ENV RECAPTCHA_PRIVATE_KEY ''
+ENV EMAIL_RESP_SERVICES ''
+ENV EMAIL_RESP_LAVERIE ''
 ```
 
 ## Licence
