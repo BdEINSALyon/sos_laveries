@@ -19,5 +19,6 @@ ENV RECAPTCHA_PUBLIC_KEY ''
 ENV RECAPTCHA_PRIVATE_KEY ''
 ENV EMAIL_RESP_SERVICES 'services@bde-insa-lyon.fr'
 ENV EMAIL_RESP_LAVERIE ''
+ENV GOOGLE_ANALYTICS_PROPERTY_ID ''
 RUN chmod +x bash/run-prod.sh
 CMD bash/run-prod.sh
