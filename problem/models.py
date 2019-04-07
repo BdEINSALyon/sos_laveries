@@ -22,7 +22,8 @@ ETAT_TICKET = [
     (0, "Nouveau"),
     (1, "Accepté"),
     (2, 'Refusé'),
-    (3, 'Clos')
+    (3, 'Clos'),
+    (4, 'Expiré')
 ]
 
 
@@ -77,6 +78,7 @@ class Ticket(models.Model):
     staff_comment = models.TextField(verbose_name="Commentaire staff (envoyé par email)", blank=True, null=True)
     date_treatment = models.DateTimeField(default=None, blank=True, null=True)
     date_refund = models.DateTimeField(default=None, blank=True, null=True)
+    email_reminder_sent = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         return "Ticket #" + str(self.pk)

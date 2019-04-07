@@ -1,0 +1,14 @@
+{% autoescape off %}
+Bonjour {{ ticket.first_name }} {{ ticket.last_name }},
+
+Depuis 3 semaines, tu peux venir récupérer {{ ticket.number_token_refund }} jeton{{ ticket.number_token_refund | pluralize }} à l'accueil du BdE pendant les heures d'ouvertures sur présentation d'un justificatif d'identité avec photo.
+
+
+!!!!!! Attention !!!!!! Il te reste moins d'une semaine pour les récupérer.
+Après le {{ date_expire }}, ta demande sera supprimée de la base de données et il nous sera totalement impossible de te rembourser.
+
+
+Merci et bonne lessive.
+L'équipe laveries du BdE INSA Lyon
+
+{% endautoescape %}

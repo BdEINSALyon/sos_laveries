@@ -3,6 +3,7 @@ Bonjour {{ ticket.first_name }} {{ ticket.last_name }},
 
 Ton ticket SOS-Laveries du {{ ticket.date_submission.date }} a été validé.
 Tu peux venir chercher {{ ticket.number_token_refund }} jeton{{ ticket.number_token_refund | pluralize }} à l'accueil du BdE pendant les heures d'ouvertures sur présentation d'un justificatif d'identité avec photo.
+Attention pour une raison d'organisation, tu disposes de 15 jours pour récupérer les jetons.
 
 La prochaine fois penses bien à fermer la porte de la machine avant de payer au monnayeur, sinon les jetons ne sont pas comptabilisés.
 (C'est un problème qui arrive beaucoup plus souvent qu'on ne le pense)

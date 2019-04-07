@@ -25,7 +25,7 @@
         </div>
     </div><br/>
 
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-header">
             Résolution
         </div>
@@ -40,10 +40,13 @@
                 <p class="card-text">En attente de traitement</p>
             {% elif object.state == 1 %}
                 <p class="card-text">Accepté le {{ object.date_treatment }} pour un remboursement
-                    de {{ object.number_token_refund }}</p>
-                {% if object.staff_comment is not None %}
+                    de {{ object.number_token_refund }} jeton{{ object.number_token_refund | pluralize }}</p>
+                {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
                 {% endif %}
+                <p class="card-text" align="center"><a href="{% url "valid_refund" object.pk %}">
+                    <button type="button" class="btn btn-success btn-lg">Jetons rendus</button>
+                </a>
                 <h5 class="card-title">Changer d'avis</h5>
                 <p class="card-text" align="center">
                     <a href="{% url "reject_ticket" object.pk %}">
@@ -51,7 +54,7 @@
                     </a></p>
             {% elif object.state == 2 %}
                 <p class="card-text">Refusé le {{ object.date_treatment }}</p>
-                {% if object.staff_comment is not None %}
+                {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
                 {% endif %}
                 <h5 class="card-title">Changer d'avis</h5>
@@ -60,10 +63,21 @@
                 </a>
                 </p>
             {% elif object.state == 3 %}
-                <p class="card-text">Remboursé {{ object.number_token_refund }} jetons le {{ object.date_refund }}</p>
-                {% if object.staff_comment is not None %}
+                <p class="card-text">Remboursé {{ object.number_token_refund }}
+                    jeton{{ object.number_token_refund | pluralize }} le {{ object.date_refund }}</p>
+                {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
                 {% endif %}
+            {% elif object.state == 4 %}
+                <p class="card-text">Expiré car le client n'est pas venu chercher ses jetons</p>
+                {% if object.staff_comment != "" %}
+                    <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+                {% endif %}
+                S'il est relou :
+                Nombre de jetons à rendre : {{ object.number_token_refund }}
+                <p class="card-text" align="center"><a href="{% url "valid_refund" object.pk %}">
+                <button type="button" class="btn btn-success btn-lg">Jetons rendus</button>
+            </a>
             {% endif %}
         </div>
     </div>

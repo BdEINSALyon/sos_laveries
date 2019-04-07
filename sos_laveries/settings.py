@@ -124,7 +124,8 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CRONJOBS = [
-    ('0 */12 * * *', 'problem.cron.notify_pending')
+    ('0 */12 * * *', 'problem.cron.notify_pending'),
+    ('0 9 * * *', 'problem.cron.old_ticket')
 ]
 
 # FIX Variables d'environnement pas présentes dans cron

@@ -4,6 +4,7 @@
         <div class="table-responsive">
             <table class="table">
                 <tr>
+                    <th>Ticket</th>
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Email</th>
@@ -12,6 +13,7 @@
                 </tr>
                 {% for ticket in object_list %}
                     <tr>
+                        <td><a href="{% url 'show_ticket' ticket.pk %}">{{ ticket.pk }}</a></td>
                         <td>{{ ticket.first_name }}</td>
                         <td>{{ ticket.last_name }}</td>
                         <td>{{ ticket.insa_email }}</td>
