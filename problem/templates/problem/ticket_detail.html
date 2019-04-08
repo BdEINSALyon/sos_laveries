@@ -41,8 +41,11 @@
             {% elif object.state == 1 %}
                 <p class="card-text">Accepté le {{ object.date_treatment }} par {{ object.staff_user.username }} pour un remboursement
                     de {{ object.number_token_refund }} jeton{{ object.number_token_refund | pluralize }}</p>
-                {% if object.staff_comment != "" %}
+                {% if object.staff_comment != "" and object.staff_comment is not None %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+                {% endif %}
+                {% if object.staff_comment_perm != "" and object.staff_comment_perm is not None %}
+                    <p class="card-text" style="color: red">Commentaire resp laverie pour les perm : {{ object.staff_comment_perm }}</p>
                 {% endif %}
                 <p class="card-text" align="center"><a href="{% url "valid_refund" object.pk %}">
                     <button type="button" class="btn btn-success btn-lg">Jetons rendus</button>
@@ -54,8 +57,11 @@
                     </a></p>
             {% elif object.state == 2 %}
                 <p class="card-text">Refusé le {{ object.date_treatment }} par {{ object.staff_user.username }}</p>
-                {% if object.staff_comment != "" %}
+                {% if object.staff_comment != "" and object.staff_comment is not None %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+                {% endif %}
+                {% if object.staff_comment_perm != "" and object.staff_comment_perm is not None %}
+                    <p class="card-text" style="color: red">Commentaire resp laverie pour les perm : {{ object.staff_comment_perm }}</p>
                 {% endif %}
                 <h5 class="card-title">Changer d'avis</h5>
                 <p class="card-text" align="center"><a href="{% url "accept_ticket" object.pk %}">
@@ -66,13 +72,19 @@
                 <p class="card-text">Remboursé {{ object.number_token_refund }}
                     jeton{{ object.number_token_refund | pluralize }} le {{ object.date_refund }}</p>
                 <p class="card-text">Demande acceptée par {{ object.staff_user.username }}</p>
-                {% if object.staff_comment != "" %}
+                {% if object.staff_comment != "" and object.staff_comment is not None %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+                {% endif %}
+                {% if object.staff_comment_perm != "" and object.staff_comment_perm is not None %}
+                    <p class="card-text" style="color: red">Commentaire resp laverie pour les perm : {{ object.staff_comment_perm }}</p>
                 {% endif %}
             {% elif object.state == 4 %}
                 <p class="card-text">Expiré car le client n'est pas venu chercher ses jetons</p>
-                {% if object.staff_comment != "" %}
-                    <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
+                {% if object.staff_comment != "" and object.staff_comment is not None %}
+                    <p class="card-text">Commentaire resp laverie pour le client : {{ object.staff_comment }}</p>
+                {% endif %}
+                {% if object.staff_comment_perm != "" and object.staff_comment_perm is not None %}
+                    <p class="card-text" style="color: red">Commentaire resp laverie pour les perm : {{ object.staff_comment_perm }}</p>
                 {% endif %}
                 S'il est relou :
                 Nombre de jetons à rendre : {{ object.number_token_refund }}

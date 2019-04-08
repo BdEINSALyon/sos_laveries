@@ -89,6 +89,7 @@ def AcceptTicket(request, pk_ticket):
         ticket.number_token_refund = form.cleaned_data["number_token_refund"]
         ticket.state = 1
         ticket.staff_comment = form.cleaned_data["staff_comment"]
+        ticket.staff_comment_perm = form.cleaned_data["staff_comment_perm"]
         ticket.staff_user = request.user
         ticket.save()
         msg_plain = render_to_string('problem/email_approved.txt', {'ticket': ticket})
@@ -110,6 +111,7 @@ def RejectTicket(request, pk_ticket):
         ticket.number_token_refund = 0
         ticket.state = 2
         ticket.staff_comment = form.cleaned_data["staff_comment"]
+        ticket.staff_comment_perm = form.cleaned_data["staff_comment_perm"]
         ticket.staff_user = request.user
         ticket.save()
         msg_plain = render_to_string('problem/email_rejected.txt', {'ticket': ticket})
