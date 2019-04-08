@@ -39,7 +39,7 @@
                     </a></p>
                 <p class="card-text">En attente de traitement</p>
             {% elif object.state == 1 %}
-                <p class="card-text">Accepté le {{ object.date_treatment }} pour un remboursement
+                <p class="card-text">Accepté le {{ object.date_treatment }} par {{ object.staff_user.username }} pour un remboursement
                     de {{ object.number_token_refund }} jeton{{ object.number_token_refund | pluralize }}</p>
                 {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
@@ -53,7 +53,7 @@
                         <button type="button" class="btn btn-danger btn-lg">Rejeter remboursement</button>
                     </a></p>
             {% elif object.state == 2 %}
-                <p class="card-text">Refusé le {{ object.date_treatment }}</p>
+                <p class="card-text">Refusé le {{ object.date_treatment }} par {{ object.staff_user.username }}</p>
                 {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
                 {% endif %}
@@ -65,6 +65,7 @@
             {% elif object.state == 3 %}
                 <p class="card-text">Remboursé {{ object.number_token_refund }}
                     jeton{{ object.number_token_refund | pluralize }} le {{ object.date_refund }}</p>
+                <p class="card-text">Demande acceptée par {{ object.staff_user.username }}</p>
                 {% if object.staff_comment != "" %}
                     <p class="card-text">Commentaire resp laverie : {{ object.staff_comment }}</p>
                 {% endif %}

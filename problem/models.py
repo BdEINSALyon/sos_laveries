@@ -76,6 +76,7 @@ class Ticket(models.Model):
     state = models.IntegerField(verbose_name="Etat", choices=ETAT_TICKET, blank=False, default=0)
     number_token_refund = models.IntegerField(verbose_name="Nombre de jetons rendus", blank=True, default=0, null=True)
     staff_comment = models.TextField(verbose_name="Commentaire staff (envoyé par email)", blank=True, null=True)
+    staff_user = models.ForeignKey(User, null=True, blank=True, related_name="+", on_delete=models.SET_NULL)
     date_treatment = models.DateTimeField(default=None, blank=True, null=True)
     date_refund = models.DateTimeField(default=None, blank=True, null=True)
     email_reminder_sent = models.BooleanField(default=False, null=False)
