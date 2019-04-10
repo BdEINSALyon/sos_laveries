@@ -2,6 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    {% if object.number_token_lost == 0 %}
+        <div class="alert alert-warning" role="alert">
+            L'utilisateur a simplement signalé un problème et a indiqué ne pas avoir perdu de jetons.<br>
+            Sauf si vous décidez de rendre des jetons quand même, aucun mail ne sera envoyé et le ticket sera
+            immédiatement cloturé.
+        </div>{% endif %}
     {% if action == "accept" %}<h2 style="color: green; text-align: center">Accepter le ticket</h2>
     {% elif action == "reject" %}<h2 style="color: red; text-align: center">Refuser le ticket</h2>{% endif %}
     <form method="post">

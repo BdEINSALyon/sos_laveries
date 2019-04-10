@@ -31,12 +31,18 @@
         </div>
         <div class="card-body">
             {% if object.state == 0 %}
-                <p class="card-text" align="center"><a href="{% url "accept_ticket" object.pk %}">
-                    <button type="button" class="btn btn-success btn-lg">Valider remboursement</button>
-                </a>
-                    <a href="{% url "reject_ticket" object.pk %}">
-                        <button type="button" class="btn btn-danger btn-lg">Rejeter remboursement</button>
+                {% if object.number_token_lost > 0 %}
+                    <p class="card-text" align="center"><a href="{% url "accept_ticket" object.pk %}">
+                        <button type="button" class="btn btn-success btn-lg">Valider remboursement</button>
+                    </a>
+                        <a href="{% url "reject_ticket" object.pk %}">
+                            <button type="button" class="btn btn-danger btn-lg">Rejeter remboursement</button>
+                        </a></p>
+                {% else %}
+                    <p class="card-text" align="center"><a href="{% url "accept_ticket" object.pk %}">
+                        <button type="button" class="btn btn-success btn-lg">Clôturer ou rembourser le client</button>
                     </a></p>
+                {% endif %}
                 <p class="card-text">En attente de traitement</p>
             {% elif object.state == 1 %}
                 <p class="card-text">Accepté le {{ object.date_treatment }} par {{ object.staff_user.username }} pour un remboursement
