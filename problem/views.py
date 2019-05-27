@@ -5,11 +5,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView
+from django.http import HttpResponse
+
 
 from sos_laveries import settings
 from .forms import TicketForm, AcceptForm, RejectForm
 from .models import Ticket, Building
-
+from .resources import TicketResource
 
 def home(request):
     building = Building.objects.filter(active=True).order_by("name")
@@ -132,3 +134,20 @@ def RejectTicket(request, pk_ticket):
         )
         return redirect(reverse("to_treat_list"))
     return render(request, 'problem/form_admin.html', {"object": ticket, "form": form, "action": "reject"})
+
+
+def export_ticket(request):
+    ticket_resource = TicketResource()
+    dataset = ticket_resource.export()
+    response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="tickets.xls"'
+    return response
+
+def stats(request):
+    ticket_30j = Ticket.objects.filter(date_submission__gte=timezone.now() - timezone.timedelta(days=30))
+    somme30j = ticket_30j.count()
+    building_list = Building.objects.all()
+    stats_building=[]
+    for building in building_list:
+        stats_building.append((building.name, ticket_30j.filter(machine__building=building).count()))
+    return render(request, 'problem/stats_admin.html', {"stats_building": stats_building, "somme30j": somme30j})

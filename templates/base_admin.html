@@ -61,6 +61,9 @@
                 <li class="nav-item {% if request.resolver_match.url_name == 'all_list' or request.resolver_match.url_name == 'show_ticket' %}active{% endif %}">
                     <a class="nav-link" href="{% url "all_list" %}">Tous les tickets</a>
                 </li>
+                <li class="nav-item {% if request.resolver_match.url_name == 'stats' %}active{% endif %}">
+                    <a class="nav-link" href="{% url "stats" %}">Statistiques</a>
+                </li>
                 {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "admin:index" %}" style="color: red;">Administration Django</a>

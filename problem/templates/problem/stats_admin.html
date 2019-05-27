@@ -1,0 +1,9 @@
+{% extends "base_admin.html" %}
+{% block content %}
+    <h1>Nombre de tickets ouverts sur les 30 derniers jours</h1>
+    <h4>Ticket au total : {{ somme30j }}</h4>
+{% for building in stats_building %}
+    <li>Batiment {{ building.0 }} : {{ building.1 }}</li>
+{% endfor %}<br/>
+    <a href="{% url "export_ticket" %}"><button type="button" class="btn btn-primary">Exporter la liste des tickets pour stats sur Excel</button></a>
+{% endblock %}

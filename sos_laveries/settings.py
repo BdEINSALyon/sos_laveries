@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'captcha',
     'django_crontab',
     'email_obfuscator',
-    'analytical'
+    'analytical',
+    'import_export'
 
 ]
 
