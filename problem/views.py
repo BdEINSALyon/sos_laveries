@@ -5,11 +5,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView
+from django.http import HttpResponse
+
 
 from sos_laveries import settings
 from .forms import TicketForm, AcceptForm, RejectForm
 from .models import Ticket, Building
-
+from .resources import TicketResource
 
 def home(request):
     building = Building.objects.filter(active=True).order_by("name")
@@ -85,18 +87,29 @@ def AcceptTicket(request, pk_ticket):
         number_ticket_refund = ticket.number_token_lost
     form = AcceptForm(request.POST or None, initial={"number_token_refund": number_ticket_refund})
     if form.is_valid():
-        ticket.date_treatment = timezone.now()
-        ticket.number_token_refund = form.cleaned_data["number_token_refund"]
-        ticket.state = 1
-        ticket.staff_comment = form.cleaned_data["staff_comment"]
-        ticket.save()
-        msg_plain = render_to_string('problem/email_approved.txt', {'ticket': ticket})
-        send_mail(
-            'Validation de la demande de remboursement',
-            msg_plain,
-            settings.DEFAULT_FROM_EMAIL,
-            [ticket.insa_email],
-        )
+        number_token_refund = int(form.cleaned_data["number_token_refund"])
+        if number_token_refund > 0:
+            ticket.date_treatment = timezone.now()
+            ticket.number_token_refund = number_ticket_refund
+            ticket.state = 1
+            ticket.staff_comment = form.cleaned_data["staff_comment"]
+            ticket.staff_comment_perm = form.cleaned_data["staff_comment_perm"]
+            ticket.staff_user = request.user
+            ticket.save()
+            msg_plain = render_to_string('problem/email_approved.txt', {'ticket': ticket})
+            send_mail(
+                'Validation de la demande de remboursement',
+                msg_plain,
+                settings.DEFAULT_FROM_EMAIL,
+                [ticket.insa_email],
+            )
+        else:
+            ticket.date_treatment = timezone.now()
+            ticket.number_token_refund = number_ticket_refund
+            ticket.state = 3
+            ticket.staff_comment_perm = form.cleaned_data["staff_comment_perm"]
+            ticket.staff_user = request.user
+            ticket.save()
         return redirect(reverse("to_treat_list"))
     return render(request, 'problem/form_admin.html', {"object": ticket, "form": form, "action": "accept"})
 
@@ -109,6 +122,8 @@ def RejectTicket(request, pk_ticket):
         ticket.number_token_refund = 0
         ticket.state = 2
         ticket.staff_comment = form.cleaned_data["staff_comment"]
+        ticket.staff_comment_perm = form.cleaned_data["staff_comment_perm"]
+        ticket.staff_user = request.user
         ticket.save()
         msg_plain = render_to_string('problem/email_rejected.txt', {'ticket': ticket})
         send_mail(
@@ -119,3 +134,20 @@ def RejectTicket(request, pk_ticket):
         )
         return redirect(reverse("to_treat_list"))
     return render(request, 'problem/form_admin.html', {"object": ticket, "form": form, "action": "reject"})
+
+
+def export_ticket(request):
+    ticket_resource = TicketResource()
+    dataset = ticket_resource.export()
+    response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="tickets.xls"'
+    return response
+
+def stats(request):
+    ticket_30j = Ticket.objects.filter(date_submission__gte=timezone.now() - timezone.timedelta(days=30))
+    somme30j = ticket_30j.count()
+    building_list = Building.objects.all()
+    stats_building=[]
+    for building in building_list:
+        stats_building.append((building.name, ticket_30j.filter(machine__building=building).count()))
+    return render(request, 'problem/stats_admin.html', {"stats_building": stats_building, "somme30j": somme30j})

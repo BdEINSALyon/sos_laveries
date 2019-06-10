@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'captcha',
     'django_crontab',
     'email_obfuscator',
-    'analytical'
+    'analytical',
+    'import_export'
 
 ]
 
@@ -143,6 +144,10 @@ ANYMAIL = {
     # (exact settings here depend on your ESP...)
     "MAILGUN_API_KEY": os.getenv('MAILGUN_KEY', ""),
     "MAILGUN_SENDER_DOMAIN": os.getenv('MAILGUN_DOMAIN', 'mg.bde-insa-lyon.fr'),  # your Mailgun domain, if needed
+    "SEND_DEFAULTS": {
+        "tags": ["sos-laveries"],
+        "track_clicks": False,
+    },
 }
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', "sos-laveries@mg.bde-insa-lyon.fr")

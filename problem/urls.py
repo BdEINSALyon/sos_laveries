@@ -15,4 +15,6 @@ urlpatterns = [
     path('manager/all', login_required(views.BrowseAll.as_view()), name='all_list'),
     path('manager', login_required(views.BrowseToRefund.as_view()), name='to_refund_list'),
     path('manager/show/<int:pk>', login_required(DetailView.as_view(model=Ticket)), name='show_ticket'),
+    path('manager/export_ticket', login_required(views.export_ticket), name='export_ticket'),
+    path('manager/stats', login_required(views.stats), name='stats'),
 ]

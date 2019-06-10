@@ -9,6 +9,7 @@
                     <th>Nom</th>
                     <th>Email</th>
                     <th>Nombre de jetons à rendre</th>
+                    <th>Date acceptation</th>
                     <th>Valider rendu</th>
                 </tr>
                 {% for ticket in object_list %}
@@ -17,7 +18,8 @@
                         <td>{{ ticket.first_name }}</td>
                         <td>{{ ticket.last_name }}</td>
                         <td>{{ ticket.insa_email }}</td>
-                        <td>{{ ticket.number_token_refund }}</td>
+                        <td>{{ ticket.number_token_refund }} {% if ticket.staff_comment_perm != "" and ticket.staff_comment_perm is not None %}<button type="button" class="btn btn-sm btn-danger" data-toggle="popover" title="Message resp aux permanenciers" data-content="{{ ticket.staff_comment_perm }}">Mess. Resp Laveries</button>{% endif %}</td>
+                        <td>{{ ticket.date_treatment }}</td>
                         <td>
                             <form method="get" action="{% url "valid_refund" ticket.pk %}">
                                 <button class="btn btn-success"
@@ -59,4 +61,7 @@
         <p align="center"><i style="color: green" class="fas fa-check-circle fa-10x"></i><br>
             Personne à rembourser actuellement</p>
     {% endif %}
+    <script>$(function () {
+  $('[data-toggle="popover"]').popover()
+})</script>
 {% endblock %}

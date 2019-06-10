@@ -30,10 +30,14 @@ class TicketForm(forms.ModelForm):
 class AcceptForm(forms.Form):
     number_token_refund = forms.IntegerField(required=True, label="Nombre de jetons à rendre",
                                              help_text="Maximum 3 normalement")
-    staff_comment = forms.CharField(required=False, label="Commentaire resp laverie",
-                                    help_text="Ajouté dans l'email, optionnel")
+    staff_comment = forms.CharField(required=False, label="Commentaire pour le client",
+                                    help_text="Optionnel, ajouté dans l'email envoyé au client")
+    staff_comment_perm = forms.CharField(required=False, label="Commentaire pour le permanencier BdE",
+                                    help_text="Optionnel")
 
 
 class RejectForm(forms.Form):
-    staff_comment = forms.CharField(required=True, label="Commentaire resp laverie",
-                                    help_text="Ajouté dans l'email après le texte de refus, obligatoire")
+    staff_comment = forms.CharField(required=True, label="Commentaire pour le client",
+                                    help_text="Obligatoire, ajouté dans l'email après le texte de refus")
+    staff_comment_perm = forms.CharField(required=False, label="Commentaire pour le permanencier BdE",
+                                         help_text="Optionnel")
