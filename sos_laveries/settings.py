@@ -29,7 +29,9 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', "sos-laveries.bde-insa-lyon.fr")]
 if DEBUG:
     ALLOWED_HOSTS.extend(['127.0.0.1'])
     ALLOWED_HOSTS.extend(['localhost'])
-
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 # Application definition
 
 INSTALLED_APPS = [
@@ -149,7 +151,6 @@ ANYMAIL = {
         "track_clicks": False,
     },
 }
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', "sos-laveries@mg.bde-insa-lyon.fr")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 

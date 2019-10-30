@@ -12,10 +12,12 @@ TYPE_MACHINE = [
 
 TYPE_PROBLEM = [
     (0, "Le linge est bloqué dans la machine (the laundry is stuck inside the machine)"),
-    (1, "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a coin but the cycle didn't start)"),
+    (1, "J'ai mis un jeton mais le cycle n'a pas démarré (I inserted a token but the cycle didn't start)"),
     (2, 'La laverie est innondée (the laundry is flooded)'),
     (3, 'Le monnayeur a été fracturé (the change machine has been broken into)'),
     (4, 'Autre/Other'),
+    (5, 'Le monnayeur ne reconnaît pas le jeton (change machine did not recognize my token)'),
+    (6, 'La machine sélectionnée fuit, précisez les détails dans le champ commentaires (my machine has a leak, give more details in the comments)')
 ]
 
 ETAT_TICKET = [
